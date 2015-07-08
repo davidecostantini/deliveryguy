@@ -1,4 +1,12 @@
 {
+    "repo": [
+        {
+            "url": "",
+            "destination": "",
+            "run_before": "",
+            "run_after": ""
+        }
+    ],
     "instructions": [
         {
             "source": "",

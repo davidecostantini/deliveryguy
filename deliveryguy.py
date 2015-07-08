@@ -17,12 +17,11 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 def printMsg(kMsgDesc,kQuit=False,kError=False):
+    msg=getDate() + " - " + getHostname() + " - " + kMsgDesc
     if kError:
-        print bcolors.FAIL
+        print bcolors.FAIL + msg + bcolors.ENDC
     else:
-        print bcolors.OKCYAN
-
-    print getDate() + " - " + getHostname() + " - " + kMsgDesc + bcolors.ENDC
+        print bcolors.OKCYAN + msg + bcolors.ENDC
 
     if kQuit:
         import sys
@@ -30,9 +29,7 @@ def printMsg(kMsgDesc,kQuit=False,kError=False):
 
 def checkFileExistence(fileToCheck):
     import os
-    if (not os.path.isfile(fileToCheck)):
-        return False
-    return True
+    return os.path.isfile(fileToCheck)
 
 def getHostname():
     from socket import gethostname
@@ -72,27 +69,41 @@ def copyFile(kSource,kDestination):
 def main(args):
     import datetime
 
+    printMsg("Starting")
+
+    printMsg("Working on " + instructions_path)
+
     if not checkFileExistence(instructions_path):
         printMsg("instructions_path not found",True,True)
 
-    printMsg('Starting')
-
+    #Load JSON
     instructions=loadJsonFile(instructions_path)
 
+    #Pull repo if any
+    repo=instructions["repo"][0]
+    if len(str(repo["url"])) > 0:
+        printMsg("Found repo")
+        printMsg("Cloning " + repo["url"] + "...")
+        from subprocess import call
+        call(["git", "clone", repo["url"], repo["destination"]])
+
+    #Cycle instructions
     for task in instructions["instructions"]:
 
-        printMsg("Working on " + task["source"])
+        #Check if a value has been specified
+        if len(task["source"]) > 0 and len(task["destination"]) > 0:
+            printMsg("Working on " + task["source"])
 
-        #Check script before copy
-        if len(task["run_before"]):
-            runScript(task["run_before"])
+            #Check script before copy
+            if len(task["run_before"]):
+                runScript(task["run_before"])
 
-        #Copy file
-        copyFile(task["source"], task["destination"])
+            #Copy file
+            copyFile(task["source"], task["destination"])
 
-        #Check script after copy
-        if len(task["run_after"]):
-            runScript(task["run_after"])
+            #Check script after copy
+            if len(task["run_after"]):
+                runScript(task["run_after"])
 
     if process_error:
         printMsg("Process terminated with errors",False,True)
@@ -100,6 +111,9 @@ def main(args):
         printMsg("Process finished successfully")
 
 if __name__ == "__main__":
-	import os
-	instructions_path=os.path.dirname(os.path.abspath(__file__)) + "/" + instructions_path
-	main(sys.argv[1:])
+    import os
+    if len(sys.argv) > 1:
+        instructions_path=str(sys.argv[1])
+    else:
+        instructions_path=os.path.dirname(os.path.abspath(__file__)) + "/" + instructions_path
+    main(sys.argv)
