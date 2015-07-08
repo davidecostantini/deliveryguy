@@ -1,22 +1,22 @@
 {
     "repo": [
         {
-            "url": "",
-            "destination": "",
+            "url": "git@github.com:davidecostantini/test1.git",
+            "destination": "/tmp/repo_test",
             "run_before": "",
             "run_after": ""
         }
     ],
     "instructions": [
         {
-            "source": "",
-            "destination": "",
+            "source": "/tmp/repo_test/prova1",
+            "destination": "/tmp/prova1",
             "run_before": "",
             "run_after": ""
         },
         {
-            "source": "",
-            "destination": "",
+            "source": "/tmp/repo_test/prova2",
+            "destination": "/tmp/prova2",
             "run_before": "",
             "run_after": ""
         }

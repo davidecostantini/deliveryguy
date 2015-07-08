@@ -27,9 +27,13 @@ def printMsg(kMsgDesc,kQuit=False,kError=False):
         import sys
         sys.exit(1)
 
-def checkFileExistence(fileToCheck):
+def checkFileExistence(kFileToCheck):
     import os
-    return os.path.isfile(fileToCheck)
+    return os.path.isfile(kFileToCheck)
+
+def checkFolderExistence(kFolderToCheck):
+    import os
+    return os.path.isdir(kFolderToCheck)
 
 def getHostname():
     from socket import gethostname
@@ -66,6 +70,19 @@ def copyFile(kSource,kDestination):
         process_error=True
         printMsg ("Error while copying " + kSource + " to " + kDestination,False,True)
 
+def pullRepo(kRepo):
+    from subprocess import call
+    try:
+        #If folder exists I'll delete
+        if checkFolderExistence(kRepo["destination"]):
+            printMsg("Deleting folder " + kRepo["destination"])
+            call(["rm", "-rf", kRepo["destination"]])
+
+        call(["git", "clone", kRepo["url"], kRepo["destination"]])
+
+    except:
+        printMsg ("Error while copying " + kRepo["url"] + " to " + kRepo["destination"],False,True)
+
 def main(args):
     import datetime
 
@@ -83,9 +100,19 @@ def main(args):
     repo=instructions["repo"][0]
     if len(str(repo["url"])) > 0:
         printMsg("Found repo")
+
+        #Check script before copy
+        if len(repo["run_before"]):
+            printMsg("Exec script " + repo["run_before"])
+            runScript(repo["run_before"])
+
         printMsg("Cloning " + repo["url"] + "...")
-        from subprocess import call
-        call(["git", "clone", repo["url"], repo["destination"]])
+        pullRepo(repo)
+
+        #Check script after copy
+        if len(repo["run_after"]):
+            printMsg("Exec script " + repo["run_after"])
+            runScript(repo["run_after"])        
 
     #Cycle instructions
     for task in instructions["instructions"]:
@@ -96,6 +123,7 @@ def main(args):
 
             #Check script before copy
             if len(task["run_before"]):
+                printMsg("Exec script " + task["run_before"])
                 runScript(task["run_before"])
 
             #Copy file
@@ -103,6 +131,7 @@ def main(args):
 
             #Check script after copy
             if len(task["run_after"]):
+                printMsg("Exec script " + task["run_after"])
                 runScript(task["run_after"])
 
     if process_error:
