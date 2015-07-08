@@ -9,12 +9,14 @@
     ],
     "instructions": [
         {
+            "target": "*",
             "source": "",
             "destination": "",
             "run_before": "",
             "run_after": ""
         },
         {
+            "target": "*",
             "source": "",
             "destination": "",
             "run_before": "",
