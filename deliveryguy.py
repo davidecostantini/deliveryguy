@@ -53,9 +53,9 @@ def loadJsonFile(filePath):
         printMsg ("You're a bad boy! The JSON launch config is not correct. Go and check...",True,True)
 
 def runScript(kScript):
-    #todo
+    from subprocess import call
     try:
-        print "runScript todo " + kScript
+        call([kScript])
 
     except:
         printMsg ("runScript todo",True,True)
@@ -71,17 +71,23 @@ def copyFile(kSource,kDestination):
         printMsg ("Error while copying " + kSource + " to " + kDestination,False,True)
 
 def pullRepo(kRepo):
-    from subprocess import call
+    import subprocess as sp
     try:
         #If folder exists I'll delete
         if checkFolderExistence(kRepo["destination"]):
             printMsg("Deleting folder " + kRepo["destination"])
             call(["rm", "-rf", kRepo["destination"]])
 
-        call(["git", "clone", kRepo["url"], kRepo["destination"]])
+
+        child = sp.Popen(["git", "clone", kRepo["url"], kRepo["destination"]], stdout=sp.PIPE)
+        streamdata = child.communicate()[0]
+        rc = child.returncode
+        print rc
+        if rc <> 0:
+            raise Exception("")
 
     except:
-        printMsg ("Error while copying " + kRepo["url"] + " to " + kRepo["destination"],False,True)
+        printMsg ("Error " + str(rc) + " while cloning/pulling " + kRepo["url"] + " to " + kRepo["destination"],True,True)
 
 def main(args):
     import datetime
