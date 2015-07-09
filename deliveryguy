@@ -88,7 +88,7 @@ def pullRepo(kUrl,kDestination):
     except:
         printMsg ("Error while cloning/pulling " + kUrl + " to " + kDestination,True,True)
 
-def main():
+def main(kRepoPulled):
     import datetime
 
     printMsg("Working on " + instructions_path)
@@ -99,23 +99,27 @@ def main():
     #Load JSON
     instructions=loadJsonFile(instructions_path)
 
-    #Pull repo if any
+    #Pull repo if any and if not already pulled by param
     repo=instructions["repo"][0]
     if len(str(repo["url"])) > 0:
-        printMsg("Found repo")
+        if not RepoPulled:
+            printMsg("Found repo")
 
-        #Check script before copy
-        if len(repo["run_before"]):
-            printMsg("Exec script " + repo["run_before"])
-            runScript(repo["run_before"])
+            #Check script before copy
+            if len(repo["run_before"]):
+                printMsg("Exec script " + repo["run_before"])
+                runScript(repo["run_before"])
 
-        printMsg("Cloning " + repo["url"] + "...")
-        pullRepo(kRepo["url"],kRepo["destination"])
+            printMsg("Cloning " + repo["url"] + "...")
+            pullRepo(kRepo["url"],kRepo["destination"])
 
-        #Check script after copy
-        if len(repo["run_after"]):
-            printMsg("Exec script " + repo["run_after"])
-            runScript(repo["run_after"])        
+            #Check script after copy
+            if len(repo["run_after"]):
+                printMsg("Exec script " + repo["run_after"])
+                runScript(repo["run_after"])
+
+        else:
+            printMsg("Repo but skipped because has been passed REPO arg") 
 
     #Cycle instructions
     for task in instructions["instructions"]:
@@ -148,6 +152,7 @@ def main():
 if __name__ == "__main__":
     import argparse
 
+    RepoPulled=False
     #Parse params
     parser = argparse.ArgumentParser(prog='deliveryguy')
     group = parser.add_mutually_exclusive_group(required=True)
@@ -165,9 +170,10 @@ if __name__ == "__main__":
         pullRepo(args.repo_url,"/tmp/deliveryguy")
         printMsg("Try to locate instructions.json inside repo at /tmp/deliveryguy")
         instructions_path="/tmp/deliveryguy/instructions.json"
+        RepoPulled=True
 
     elif len(args.json_config)>0:
         instructions_path=args.json_config
     
     #Start main process
-    main()
+    main(RepoPulled)
