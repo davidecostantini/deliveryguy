@@ -148,8 +148,8 @@ def main():
 if __name__ == "__main__":
     import argparse
 
+    #Parse params
     parser = argparse.ArgumentParser(prog='deliveryguy')
-
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-config', action='store', dest='json_config',
                         help='Config JSON')
@@ -169,5 +169,5 @@ if __name__ == "__main__":
     elif len(args.json_config)>0:
         instructions_path=args.json_config
     
-    #Start process
+    #Start main process
     main()
