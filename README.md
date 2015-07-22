@@ -1,6 +1,8 @@
 Delivery Guy
 ==============
 
+<img src="https://raw.githubusercontent.com/infomentum/deliveryguy/master/images/deliveryguy.png" alt=""/>
+
 Deliveryguy is a tool to deploy config files and other kind of files and execute scripts before and after the copy.
 --------------
 
