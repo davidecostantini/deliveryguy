@@ -9,17 +9,12 @@ Deliveryguy is a tool to deploy config files and other kind of files and execute
 In the repo section you can optionally specify a repo to pull, this will be skipped if you specify a repo by argument when you launch the tool.
 In instructions you have:
 
-**TARGET:** Host target, use * for all
-
-**SOURCE:** File path that have to be copied
-
-**DESTINATION:** Destination of file
-
-**RUN_BEFORE:** Script to run before copy
-
-**RUN_AFTER:** Script to run after copy
-
-**MD5_CHECK:** If enabled check the MD5 of the 2 files before execute the copy and proceed only if they are different.
+- **TARGET:** Host target, use * for all
+- **SOURCE:** File path that have to be copied
+- **DESTINATION:** Destination of file
+- **RUN_BEFORE:** Script to run before copy
+- **RUN_AFTER:** Script to run after copy
+- **MD5_CHECK:** If enabled check the MD5 of the 2 files before execute the copy and proceed only if they are different.
 
 **USAGE**
 
