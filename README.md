@@ -1,12 +1,14 @@
 Delivery Guy
 ==============
 
-<img src="https://raw.githubusercontent.com/infomentum/deliveryguy/master/images/deliveryguy.png" alt=""/>
+<img src="https://raw.githubusercontent.com/infomentum/deliveryguy/master/images/deliveryguy.jpg" alt=""/>
 
 Deliveryguy is a tool to deploy config files and other kind of files and execute scripts before and after the copy.
 --------------
 
 **CONFIG**
+
+<img src="https://raw.githubusercontent.com/infomentum/deliveryguy/master/images/config.png" width="250px" alt=""/>
 
 In the repo section you can optionally specify a repo to pull, this will be skipped if you specify a repo by argument when you launch the tool.
 In instructions you have:
