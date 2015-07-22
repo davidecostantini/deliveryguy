@@ -13,14 +13,16 @@
             "source": "",
             "destination": "",
             "run_before": "",
-            "run_after": ""
+            "run_after": "",
+            "md5_check": true
         },
         {
             "target": "*",
             "source": "",
             "destination": "",
             "run_before": "",
-            "run_after": ""
+            "run_after": "",
+            "md5_check": true
         }
     ]
 }
